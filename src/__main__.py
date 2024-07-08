@@ -1,12 +1,14 @@
-from typing import Union
-# import requests
-from fastapi.responses import HTMLResponse, Response, FileResponse
+from fastapi.responses import Response
 from fastapi import Request
 from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import Form
+from typing import Optional
+
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from loguru import logger
+from dotenv import load_dotenv
+import os
 
 LOGFILE_DEBUG = '/var/log/sheetsec-debug.log'
 LOGFILE_INFO = '/var/log/sheetsec-info.log'
@@ -20,8 +22,15 @@ logger.add(LOGFILE_ERROR, level='ERROR', format="{time} {level} {message}")
 
 logger.info("SheetSec starting")
 
-logger.debug("Reading creds from local .env for now - use container secret mgmt later")
+logger.debug("Reading env variables")
+load_dotenv("src/.env")
 
+# Retrieve values
+API_KEY = os.getenv('API_KEY')
+DB_USER = os.getenv('DB_USER')
+DB_PASS = os.getenv('DB_PASS')
+ADMIN_USER = os.getenv('ADMIN_USER')
+ADMIN_PASS = os.getenv('ADMIN_PASS')
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="src/static"), name="static")
@@ -52,6 +61,24 @@ def login(request: Request):
         # empty context for now as we're not populating any templated values
        request=request, name="admin.html", context={})
 
-@app.get('/favicon.ico', include_in_schema=False)
-async def favicon():
-    return FileResponse('src/static/favicon.ico')
+# @app.get('/favicon.ico', include_in_schema=False)
+# async def favicon():
+#     return FileResponse('src/static/favicon.ico')
+
+@app.post("/logon")
+async def login(request: Request, username: str = Form(...), password: Optional[str] = Form(None)):
+
+    if username == ADMIN_USER:
+        if password and password != ADMIN_PASS:
+            logger.warning("Bad credentials provided for admin logon")
+            return
+        else:
+            logger.info("Authenticated admin user")
+    else:
+        logger.warning("Bad username provided for admin logon")
+    
+    
+    
+    return templates.TemplateResponse(
+        # empty context for now as we're not populating any templated values
+       request=request, name="server.html", context={})

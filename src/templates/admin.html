@@ -5,7 +5,7 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22>🎹</text></svg>"></link>
     <title>SheetSecurity Admin Portal</title>
     <link rel="stylesheet" href="/static/pico.min.css">
-    <script src="dynamic/script.js"></script>
+    <!-- <script src="dynamic/js/admin.js"></script> -->
   </head>
   <body>
 
@@ -27,7 +27,7 @@
             <section id="logon">
               <h2>Logon</h2>
               
-              <form>
+              <form action="/logon" method="POST">
                 <div class="grid">
                   <input
                     type="text"
@@ -40,7 +40,7 @@
                 <div class="grid">
                   <input
                     type="password"
-                    name="Password"
+                    name="password"
                     placeholder="Password"
                     aria-label="Password"
                     required
