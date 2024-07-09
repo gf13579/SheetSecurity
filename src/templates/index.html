@@ -1,13 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22>🎹</text></svg>"></link>
-    <title>SheetSecurity</title>
-    <link rel="stylesheet" href="/static/pico.min.css">
-    <script src="dynamic/js/app.js"></script>
-  </head>
-  <body>
-    <a href="/admin">Admin Logon</a>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22>🎹</text></svg>">
+  </link>
+  <title>SheetSecurity</title>
+  <link rel="stylesheet" href="/static/pico.min.css">
+  <script src="static/js/app.js"></script>
+  <script src="static/js/opensheetmusicdisplay.min.js"></script> <!-- you need to provide the .js file, see README.md-->
+</head>
+
+<body>
+
+  <header class="container">
+    <hgroup>
+      <div style="text-align: right;">
+        <a href="/admin">Admin Logon</a>
+      </div>
+      <h1>Sheet Security</h1>
+      <p>Secure your sheet music with a piracy-proof watermark</p>
+
+    </hgroup>
+    <hr/>
+  </header>
+
+
+
+
+  <main class="container">
+    <!-- Preview -->
+    
+
+
+      <section id="upload">
+        <div class="grid">
+          <div style="display:flex; flex-direction: row; align-items: center;">
+          Upload MusicXML (mxl) file - max 1MB.
+        </div>
+          <input type="file" id="fileInput" accept="application/vnd.recordare.musicxml">
+          <button type="button" onclick="uploadFile()">Upload</button>
+        </div>
+      </section>
+
+
+
+  <div id="osmdContainer" style="background-color: #EBEBEB"></div>
+  
+
+
+  <script>
+    var osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay("osmdContainer");
+    osmd.setOptions({
+      backend: "svg",
+      drawTitle: true,
+      // drawingParameters: "compacttight" // don't display title, composer etc., smaller margins
+    });
+    osmd
+      .load("http://127.0.0.1:8000/static/MozaVeilSample.xml")
+      .then(
+        function() {
+          osmd.render();
+        }
+      );
+  </script>
+
+</body>
+
 </html>
