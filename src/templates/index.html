@@ -48,22 +48,8 @@
 
   <div id="osmdContainer" style="background-color: #EBEBEB"></div>
   
-
-
   <script>
-    var osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay("osmdContainer");
-    osmd.setOptions({
-      backend: "svg",
-      drawTitle: true,
-      // drawingParameters: "compacttight" // don't display title, composer etc., smaller margins
-    });
-    osmd
-      .load("http://127.0.0.1:8000/static/MozaVeilSample.xml")
-      .then(
-        function() {
-          osmd.render();
-        }
-      );
+    
   </script>
 
 </body>

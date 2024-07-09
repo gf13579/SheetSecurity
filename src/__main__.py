@@ -36,7 +36,7 @@ LOGFILE_ERROR = '/var/log/sheetsec-error.log'
 def clear_log_file(logfile):
     try:
         with open(logfile, 'w') as file:
-            file.truncate(0)  # Clear the file contents
+            file.truncate(0)
         print(f"Cleared contents of {logfile}")
     except FileNotFoundError:
         print(f"File '{logfile}' not found.")
@@ -55,6 +55,7 @@ def debug_filter(record):
 logger.add(LOGFILE_INFO, level='INFO', format="{time} {level} {message}")
 logger.add(LOGFILE_WARN, level='WARNING', format="{time} {level} {message}")
 logger.add(LOGFILE_ERROR, level='ERROR', format="{time} {level} {message}")
+
 # Log only debug messages (not info, warning and error too)
 logger.add(LOGFILE_DEBUG, level='DEBUG', filter=debug_filter, format="{time} {level} {message}")
 
@@ -107,13 +108,13 @@ async def get_script():
 def login(request: Request):
     
     return templates.TemplateResponse(
-        # empty context for now as we're not populating any templated values
        request=request, name="admin.html", context={})
 
 @app.post("/admin")
 async def login(request: Request, username: str = Form(...), password: Optional[str] = Form(None)):
 
     if username == ADMIN_USER:
+        # deliberately flawed logic
         if password and password != ADMIN_PASS:
             logger.warning("Bad credentials provided for admin logon")
             return
@@ -141,7 +142,6 @@ def server(request: Request, session: str = Cookie(None)):
         info_logs = file.read()
     
     return templates.TemplateResponse(
-        # empty context for now as we're not populating any templated values
        request=request, name="server.html", context={"info_logs": info_logs})
 
 
@@ -152,7 +152,6 @@ async def valid_content_length(content_length: int = Header(..., lt=1_000_000)):
 @app.post("/upload")
 async def upload(file: UploadFile = File(...), file_size: int = Depends(valid_content_length)):
     global file_storage
-    # file_contents = await file.read()
 
     # From https://github.com/tiangolo/fastapi/issues/362
     # read it in chunks in case we've been sent more than the content-length header suggests
@@ -198,13 +197,13 @@ async def upload(file: UploadFile = File(...), file_size: int = Depends(valid_co
 
     # musicxml_contents = add_watermark(musicxml_contents)
 
+    # Limit the file_storage dict to the 10 most recent items (9 + the new one)
+    if len(file_storage) > 10:
+        file_storage = OrderedDict(list(file_storage.items())[-9:])
+
     # Store the file contents in the dictionary using the hash as the key
     file_hash = hashlib.md5(musicxml_contents.encode("utf-8")).hexdigest()
     file_storage.update({file_hash: musicxml_contents})
-
-    # Limit the file_storage dict to the 10 most recent items
-    if len(file_storage) > 10:
-        file_storage = OrderedDict(list(file_storage.items())[-10:])
 
     return JSONResponse(content={"file_hash": file_hash, "message": "File uploaded and stored successfully"})
 
@@ -227,8 +226,6 @@ def add_watermark(musicxml_contents):
     # Generate a random string for the (currently fake) watermark
     random_str = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
     watermark = hashlib.sha256(random_str.encode('utf-8')).hexdigest()
-
-    # Create the watermark comment
     watermark_comment = f"{watermark}"
 
     # Insert the watermark comment towards the end of the XML

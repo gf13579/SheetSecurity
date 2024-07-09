@@ -1,11 +1,28 @@
-console.log("Initializing...");
+function loadMusicSheet(url) {
+    osmd.load(url).then(function() {
+      osmd.render();
+    });
+  }
 
-
-
+var osmd;
+  
 document.addEventListener("DOMContentLoaded", function() {
+
+    console.log("Initializing...");
     const fileInput = document.getElementById('fileInput');
     fileInput.value = '';
-    console.log("Done.");
+
+    osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay("osmdContainer");
+    osmd.setOptions({
+      backend: "svg",
+      drawUpToMeasureNumber: 12,
+      drawTitle: true,
+    });
+  
+    // Load the initial file
+    loadMusicSheet("http://127.0.0.1:8000/static/MozaVeilSample.xml");
+
+    console.log("Initialisation complete.");
 });
 
 function uploadFile() {
@@ -26,7 +43,6 @@ function uploadFile() {
     const formData = new FormData();
     formData.append('file', fileInput.files[0]);
 
-    // Replace the URL with your actual upload endpoint
     const uploadUrl = '/upload';
 
     fetch(uploadUrl, {
@@ -41,9 +57,12 @@ function uploadFile() {
     })
     .then(data => {
         console.log('File uploaded successfully:', data);
-        console.log('URL is ' + window.location.href + '/files/' + data['file_hash']);
         fileInput.value = '';
-        alert('File uploaded successfully!\n' + 'URL is ' + window.location.href + 'files/' + data['file_hash']);
+
+        var baseUrl = window.location.origin;
+        const contentToLoad = window.location.origin + '/files/' + data['file_hash'];
+        console.log("About to load " + contentToLoad)
+        loadMusicSheet(contentToLoad);
     })
     .catch(error => {
         console.error('Error uploading file:', error);
