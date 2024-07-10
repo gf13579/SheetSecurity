@@ -15,12 +15,14 @@ document.addEventListener("DOMContentLoaded", function() {
     osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay("osmdContainer");
     osmd.setOptions({
       backend: "svg",
-      drawUpToMeasureNumber: 12,
+      drawUpToMeasureNumber: 32,
       drawTitle: true,
     });
   
     // Load the initial file
-    loadMusicSheet("http://127.0.0.1:8000/static/MozaVeilSample.xml");
+    // loadMusicSheet("http://127.0.0.1:8000/static/MozaVeilSample.xml");
+    const contentToLoad = window.location.origin + '/static/never-gonna-ask-for-creds.musicxml';
+    loadMusicSheet(contentToLoad);
 
     console.log("Initialisation complete.");
 });
@@ -59,7 +61,6 @@ function uploadFile() {
         console.log('File uploaded successfully:', data);
         fileInput.value = '';
 
-        var baseUrl = window.location.origin;
         const contentToLoad = window.location.origin + '/files/' + data['file_hash'];
         console.log("About to load " + contentToLoad)
         loadMusicSheet(contentToLoad);
