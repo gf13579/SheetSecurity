@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22>🎹</text></svg>"></link>
-    <title>SheetSecurity Admin Portal</title>
-    <link rel="stylesheet" href="/static/pico.min.css">
-    <!-- <script src="static/js/admin.js"></script> -->
-  </head>
-  <body>
 
-   <!-- Header -->
-   <header class="container">
+<head>
+  <meta charset="utf-8">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22>🎹</text></svg>">
+  </link>
+  <title>SheetSecurity Admin Portal</title>
+  <link rel="stylesheet" href="/static/pico.min.css">
+  <!-- <script src="static/js/admin.js"></script> -->
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="container">
     <hgroup>
       <h1>Sheet Security Administration</h1>
       <br>
@@ -20,37 +24,31 @@
     </nav>
   </header>
   <!-- ./ Header -->
-    
-        <!-- Main -->
-        <main class="container">
-            <!-- Preview -->
-            <section id="logon">
-              <h2>Logon</h2>
-              
-              <form action="/admin" method="POST">
-                <div class="grid">
-                  <input
-                    type="text"
-                    name="username"
-                    placeholder="Username or Email Address"
-                    aria-label="Username or Email Address"
-                    required
-                  />
-                </div>
-                <div class="grid">
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    aria-label="Password"
-                    required
-                  />
-                </div>
-                  <div class="grid">
-                  <button type="submit">Logon</button>
-                </div>
-              </form>
-            </section>
-            </main>
-  </body>
+
+  <!-- Main -->
+  <main class="container">
+    <!-- Preview -->
+    <section id="logon">
+      <h2>Logon</h2>
+
+      <form action="/admin" method="POST">
+        <div class="grid">
+          <input type="text" name="username" placeholder="Username or Email Address"
+            aria-label="Username or Email Address" required />
+        </div>
+        <div class="grid">
+          <input type="password" name="password" placeholder="Password" aria-label="Password" required />
+        </div>
+        <div class="grid">
+          <button type="submit">Logon</button>
+        </div>
+      </form>
+      
+    </section>
+    <div style="text-align: center;">
+      If logging for the first time, use 'admin' and the password you entered when prompted during installation.
+    </div>
+  </main>
+</body>
+
 </html>

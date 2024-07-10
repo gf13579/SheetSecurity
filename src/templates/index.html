@@ -23,7 +23,7 @@
       <p>Secure your sheet music with a piracy-proof watermark</p>
 
     </hgroup>
-    <hr/>
+    <hr />
   </header>
 
 
@@ -31,26 +31,30 @@
 
   <main class="container">
     <!-- Preview -->
-    
 
 
-      <section id="upload">
-        <div class="grid">
-          <div style="display:flex; flex-direction: row; align-items: center;">
+
+    <section id="upload">
+      <div class="grid">
+        <div style="display:flex; flex-direction: row; align-items: center;">
           Upload MusicXML (mxl) file - max 1MB.
         </div>
-          <input type="file" id="fileInput" accept="application/vnd.recordare.musicxml">
-          <button type="button" onclick="uploadFile()">Upload</button>
-        </div>
-      </section>
+        <input type="file" id="fileInput" accept="application/vnd.recordare.musicxml">
+        <button type="button" onclick="uploadFile()">Upload</button>
+      </div>
+    </section>
 
 
 
-  <div id="osmdContainer" style="background-color: #EBEBEB"></div>
-  
-  <script>
-    
-  </script>
+    <div id="osmdContainer" style="background-color: #EBEBEB"></div>
+
+
+    <br/>
+
+    <!-- <button id="saveButton">Save As...</button> -->
+
+    <button id="downloadButton">Download watermarked file</button>
+    <input type="file" id="fileInput" style="display:none;">
 
 </body>
 

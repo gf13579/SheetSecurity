@@ -195,7 +195,7 @@ async def upload(file: UploadFile = File(...), file_size: int = Depends(valid_co
     except UnicodeDecodeError:
         musicxml_contents = musicxml_contents.decode('utf-16')
 
-    # musicxml_contents = add_watermark(musicxml_contents)
+    musicxml_contents = add_watermark(musicxml_contents)
 
     # Limit the file_storage dict to the 10 most recent items (9 + the new one)
     if len(file_storage) > 10:
@@ -214,18 +214,25 @@ async def get_file(file_hash: str):
         file_contents = file_storage[file_hash]
         headers = {'Content-Disposition': f'attachment; filename="{file_hash}.musicxml"'}
         # for testing
-        headers = {}
+        # headers = {}
         return Response(content=file_contents, media_type="application/xml", headers=headers)
     raise HTTPException(status_code=404, detail="File not found")
 
 
 def add_watermark(musicxml_contents):
+
+    # Detect the encoding of the input XML
+    if 'encoding="UTF-16"' in musicxml_contents:
+        encoding = 'utf-16'
+    else:
+        encoding = 'utf-8'
+
     parser = etree.XMLParser(resolve_entities=True)
-    root = etree.fromstring(musicxml_contents.encode('utf-8'), parser=parser)
+    root = etree.fromstring(musicxml_contents.encode(encoding), parser=parser)
 
     # Generate a random string for the (currently fake) watermark
     random_str = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
-    watermark = hashlib.sha256(random_str.encode('utf-8')).hexdigest()
+    watermark = hashlib.sha256(random_str.encode(encoding)).hexdigest()
     watermark_comment = f"{watermark}"
 
     # Insert the watermark comment towards the end of the XML
@@ -233,6 +240,6 @@ def add_watermark(musicxml_contents):
     root.append(etree.Comment(watermark_comment))
 
     # Serialize the modified XML back to a string
-    modified_xml = etree.tostring(root, encoding='utf-8', xml_declaration=True).decode('utf-8')
+    modified_xml = etree.tostring(root, encoding='utf-16', xml_declaration=True).decode('utf-16')
 
     return modified_xml

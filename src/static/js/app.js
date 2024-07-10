@@ -5,6 +5,7 @@ function loadMusicSheet(url) {
   }
 
 var osmd;
+var currentFilePath;
   
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -20,9 +21,10 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   
     // Load the initial file
-    // loadMusicSheet("http://127.0.0.1:8000/static/MozaVeilSample.xml");
-    const contentToLoad = window.location.origin + '/static/never-gonna-ask-for-creds.musicxml';
-    loadMusicSheet(contentToLoad);
+    currentFilePath = window.location.origin + '/static/never-gonna-ask-for-creds.musicxml';
+    loadMusicSheet(currentFilePath);
+
+    document.getElementById('downloadButton').addEventListener('click', download);
 
     console.log("Initialisation complete.");
 });
@@ -37,7 +39,7 @@ function uploadFile() {
     const file = fileInput.files[0];
     const fileType = file.type;
 
-    if (fileType !== 'application/vnd.recordare.musicxml' || !file.name.endsWith('.mxl')) {
+    if ((fileType !== 'application/vnd.recordare.musicxml' && fileType !== '') || !file.name.endsWith('.mxl')) {
         alert('Please upload a MusicXML file.');
         return;
     }
@@ -61,13 +63,18 @@ function uploadFile() {
         console.log('File uploaded successfully:', data);
         fileInput.value = '';
 
-        const contentToLoad = window.location.origin + '/files/' + data['file_hash'];
-        console.log("About to load " + contentToLoad)
-        loadMusicSheet(contentToLoad);
+        currentFilePath = window.location.origin + '/files/' + data['file_hash'];
+        console.log("About to load " + currentFilePath)
+        loadMusicSheet(currentFilePath);
     })
     .catch(error => {
         console.error('Error uploading file:', error);
         alert('Error uploading file. Please try again.');
     });
+    
+}
+
+function download() {
+    window.location.href = currentFilePath;
     
 }
