@@ -65,7 +65,9 @@ logger.warning(f"Logging to {LOGFILE_WARN}")
 logger.error(f"Logging to {LOGFILE_ERROR}")
 logger.debug(f"Logging to {LOGFILE_DEBUG}")
 
-logger.info(f"SheetSec starting: {__file__}")
+file_path = os.path.realpath(__file__)
+directory = os.path.dirname(file_path)
+logger.info(f"SheetSec starting script in: {directory}")
 
 logger.debug("Sourcing .env")
 load_dotenv("src/.env")

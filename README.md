@@ -4,8 +4,6 @@ CTF challenge for B Sides Brisbane 2024
 
 ## Setup
 
-(todo)
-
 ```bash
 # build
 docker build -t sheet_security_image .
